@@ -61,7 +61,7 @@ STEERING_RIGHT_PWM = 470        #pwm value for full right steering
 # 
 # #THROTTLE
 THROTTLE_CHANNEL = 1           #channel on the 9685 pwm board 0-15
-THROTTLE_FORWARD_PWM = 425      #pwm value for max forward throttle
+THROTTLE_FORWARD_PWM = 420      #pwm value for max forward throttle
 THROTTLE_STOPPED_PWM = 360      #pwm value for no movement
 THROTTLE_REVERSE_PWM = 220      #pwm value for max reverse throttle
 # 
@@ -132,7 +132,7 @@ LIDAR_UPPER_LIMIT = 270
 # SHOW_PLOT = True                #would you like to see a pop up display of final loss?
 # VERBOSE_TRAIN = True            #would you like to see a progress bar with text during training?
 # USE_EARLY_STOP = True           #would you like to stop the training if we see it's not improving fit?
-# EARLY_STOP_PATIENCE = 5         #how many epochs to wait before no improvement
+EARLY_STOP_PATIENCE = 20          #how many epochs to wait before no improvement
 # MIN_DELTA = .0005               #early stop will want this much loss change before calling it improved.
 # PRINT_MODEL_SUMMARY = True      #print layers and weights to stdout
 # OPTIMIZER = None                #adam, sgd, rmsprop, etc.. None accepts default
