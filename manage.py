@@ -20,6 +20,7 @@ import logging
 from docopt import docopt
 
 import donkeycar as dk
+from donkeycar.parts.serial_controller import SerialController
 from donkeycar.parts.transform import TriggeredCallback, DelayedTrigger
 from donkeycar.parts.tub_v2 import TubWriter
 from donkeycar.parts.datastore import TubHandler
@@ -32,7 +33,6 @@ from donkeycar.utils import *
 
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
-
 
 def drive(cfg, model_path=None, use_joystick=False, model_type=None,
           camera_type='single', meta=[]):
@@ -61,8 +61,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
 
     #Initialize car
     V = dk.vehicle.Vehicle()
-
-    
 
     #Initialize logging before anything else to allow console logging
     if cfg.HAVE_CONSOLE_LOGGING:
@@ -169,7 +167,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
             from donkeycar.parts.lidar import RPLidar
             if cfg.LIDAR_TYPE == 'RP':
                 print("adding RP lidar part")
-                lidar = RPLidar()
+                lidar = RPLidar(lower_limit = cfg.LIDAR_LOWER_LIMIT, upper_limit = cfg.LIDAR_UPPER_LIMIT)
                 V.add(lidar, inputs=[],outputs=['lidar/dist_array'], threaded=True)
             if cfg.LIDAR_TYPE == 'YD':
                 print("YD Lidar not yet supported")
@@ -382,7 +380,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
     def load_model(kl, model_path):
         start = time.time()
         print('loading model', model_path)
-
         kl.load(model_path)
         print('finished loading in %s sec.' % (str(time.time() - start)) )
 
@@ -464,6 +461,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
         from donkeycar.parts.object_detector.stop_sign_detector import StopSignDetector
         V.add(StopSignDetector(cfg.STOP_SIGN_MIN_SCORE, cfg.STOP_SIGN_SHOW_BOUNDING_BOX), inputs=['cam/image_array', 'pilot/throttle'], outputs=['pilot/throttle', 'cam/image_array'])
 
+    V.add(SerialController(), inputs=['pilot/throttle'],outputs=['pilot/throttle'], threaded=True)
     #Choose what inputs should change the car.
     class DriveMode:
         def run(self, mode,
@@ -476,24 +474,14 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
                 return pilot_angle if pilot_angle else 0.0, user_throttle
 
             else:
-                
-                
-                
-                
-                #######################################
-                # GPS 코드 집어넣고 파이썬 종료
-                # print("stop")
-                # sys.exit(1)
-                #######################################
                 return pilot_angle if pilot_angle else 0.0, pilot_throttle * cfg.AI_THROTTLE_MULT if pilot_throttle else 0.0
-                
 
     V.add(DriveMode(),
           inputs=['user/mode', 'user/angle', 'user/throttle',
                   'pilot/angle', 'pilot/throttle'],
           outputs=['angle', 'throttle'])
 
-
+    
     #to give the car a boost when starting ai mode in a race.
     aiLauncher = AiLaunch(cfg.AI_LAUNCH_DURATION, cfg.AI_LAUNCH_THROTTLE, cfg.AI_LAUNCH_KEEP_ENABLED)
 
