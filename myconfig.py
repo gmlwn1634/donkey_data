@@ -125,21 +125,21 @@ LIDAR_UPPER_LIMIT = 270
 # #line parameter --type to the python manage.py train and drive commands.
 # # tensorflow models: (linear|categorical|tflite_linear|tensorrt_linear)
 # # pytorch models: (resnet18)
-# DEFAULT_MODEL_TYPE = 'linear'
-# BATCH_SIZE = 128                #how many records to use when doing one pass of gradient decent. Use a smaller number if your gpu is running out of memory.
-# TRAIN_TEST_SPLIT = 0.8          #what percent of records to use for training. the remaining used for validation.
-# MAX_EPOCHS = 100                #how many times to visit all records of your data
-# SHOW_PLOT = True                #would you like to see a pop up display of final loss?
-# VERBOSE_TRAIN = True            #would you like to see a progress bar with text during training?
-# USE_EARLY_STOP = True           #would you like to stop the training if we see it's not improving fit?
+DEFAULT_MODEL_TYPE = 'linear'
+BATCH_SIZE = 128                #how many records to use when doing one pass of gradient decent. Use a smaller number if your gpu is running out of memory.
+TRAIN_TEST_SPLIT = 0.8          #what percent of records to use for training. the remaining used for validation.
+MAX_EPOCHS = 100                #how many times to visit all records of your data
+SHOW_PLOT = True                #would you like to see a pop up display of final loss?
+VERBOSE_TRAIN = True            #would you like to see a progress bar with text during training?
+USE_EARLY_STOP = True           #would you like to stop the training if we see it's not improving fit?
 EARLY_STOP_PATIENCE = 20          #how many epochs to wait before no improvement
-# MIN_DELTA = .0005               #early stop will want this much loss change before calling it improved.
-# PRINT_MODEL_SUMMARY = True      #print layers and weights to stdout
-# OPTIMIZER = None                #adam, sgd, rmsprop, etc.. None accepts default
-# LEARNING_RATE = 0.001           #only used when OPTIMIZER specified
-# LEARNING_RATE_DECAY = 0.0       #only used when OPTIMIZER specified
-# SEND_BEST_MODEL_TO_PI = False   #change to true to automatically send best model during training
-CACHE_IMAGES = False           #keep images in memory. will speed succesive epochs, but crater if not enough mem.
+MIN_DELTA = .0005               #early stop will want this much loss change before calling it improved.
+PRINT_MODEL_SUMMARY = True      #print layers and weights to stdout
+OPTIMIZER = None                #adam, sgd, rmsprop, etc.. None accepts default
+LEARNING_RATE = 0.001           #only used when OPTIMIZER specified
+LEARNING_RATE_DECAY = 0.0       #only used when OPTIMIZER specified
+SEND_BEST_MODEL_TO_PI = False   #change to true to automatically send best model during training
+CACHE_IMAGES = True           #keep images in memory. will speed succesive epochs, but crater if not enough mem.
 # 
 # PRUNE_CNN = False               #This will remove weights from your model. The primary goal is to increase performance.
 # PRUNE_PERCENT_TARGET = 75       # The desired percentage of pruning.
